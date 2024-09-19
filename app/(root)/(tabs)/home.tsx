@@ -13,7 +13,7 @@ import { icons, images } from "@/constants";
 import { useClerk } from "@clerk/clerk-expo";
 import GoogleTextInput from "@/components/GoogleTextInput";
 import Map from "@/components/Map";
-import { userLocationStore } from "@/store";
+import { useDriverStore, userLocationStore } from "@/store";
 import * as Location from "expo-location";
 
 const recentRide = [
@@ -125,6 +125,7 @@ const recentRide = [
 
 const Home = () => {
   const { setUserLocation, setDestinationLocation } = userLocationStore();
+  const { selectedDriver, setDrivers } = useDriverStore();
   const { user } = useClerk();
   const loading = true;
 
@@ -135,7 +136,7 @@ const Home = () => {
 
   useEffect(() => {
     const requestLocation = async () => {
-      let { status, granted } =
+      let { status } =
         await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         setHasPermission(false);
