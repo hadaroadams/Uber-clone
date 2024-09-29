@@ -1,12 +1,16 @@
 import { View, Text } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import { useDriverStore, userLocationStore } from "@/store";
-import { calculateRegion, generateMarkersFromData } from "@/lib/map";
+import {
+  calculateDriverTimes,
+  calculateRegion,
+  generateMarkersFromData,
+} from "@/lib/map";
 import { MarkerData } from "@/types/types";
 import { icons } from "@/constants";
 
-const driver = [
+const drivers = [
   {
     id: "1",
     first_name: "James",
@@ -61,7 +65,8 @@ const Map = () => {
     destinationLatitude,
     destinationLongitude,
   } = userLocationStore();
-  const { selectedDriver, setDrivers } = useDriverStore();
+  const { selectedDriver, setDrivers, clearSelectedDriver } = useDriverStore();
+
   const [markers, setMarkers] = useState<MarkerData[]>([]);
 
   const region = calculateRegion({
@@ -71,17 +76,22 @@ const Map = () => {
     destinationLongitude,
   });
   useEffect(() => {
-    if (Array.isArray(driver)) {
+    // setDrivers(drivers);
+    // clearSelectedDriver();
+    console.log("hello");
+    if (Array.isArray(drivers)) {
       if (!userLatitude || !userLongitude) return;
 
       const newMarkers = generateMarkersFromData({
-        data: driver,
+        data: drivers,
         userLatitude,
         userLongitude,
       });
       setMarkers(newMarkers);
     }
-  }, []);
+    // return () => {};
+    // console.log(drivers);
+  }, [drivers]);
   return (
     <MapView
       provider={PROVIDER_DEFAULT}
