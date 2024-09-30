@@ -1,7 +1,9 @@
 import { View, Text, Image, ImageSourcePropType } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { Tabs } from "expo-router";
 import { icons } from "@/constants";
+import { MarkerData } from "@/types/types";
+import { useDriverStore } from "@/store";
 
 const TabIcon = ({
   source,
@@ -29,6 +31,7 @@ const TabIcon = ({
 };
 
 const Tabslayout = () => {
+  console.log("TabLayout");
   return (
     <Tabs
       initialRouteName="index"
@@ -49,7 +52,6 @@ const Tabslayout = () => {
           alignItems: "center",
           flexDirection: "row",
           position: "absolute",
-
         },
       }}
     >

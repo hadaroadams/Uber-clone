@@ -16,6 +16,7 @@ const RideLayout = ({
   snapPoints?: string[];
 }) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
+  console.log("RideLayout");
   return (
     <GestureHandlerRootView>
       <View className="flex-1  bg-white">

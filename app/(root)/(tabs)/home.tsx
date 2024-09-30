@@ -126,7 +126,6 @@ const recentRide = [
 
 const Home = () => {
   const { setUserLocation, setDestinationLocation } = userLocationStore();
-  const { selectedDriver, setDrivers } = useDriverStore();
   const { user } = useClerk();
   const loading = true;
 
@@ -163,7 +162,9 @@ const Home = () => {
       });
     };
     requestLocation();
+    console.log("home1");
   }, []);
+  console.log("home");
   return (
     <SafeAreaView className="bg-general-500">
       <FlatList
