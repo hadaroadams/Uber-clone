@@ -12,15 +12,24 @@ import { icons } from "@/constants";
 import { useFetch } from "@/lib/fetch";
 import { useUser } from "@clerk/clerk-expo";
 
-const Map = () => {
-  const { data: drivers, error, loading } = useFetch<Driver[]>("/(api)/driver");
+interface MapProp {
+  useFetch?: {
+    data: Driver[] | null;
+    loading: boolean;
+    error: string | null;
+    refetch: () => Promise<void>;
+  };
+}
+
+const Map = ({ useFetch }: MapProp) => {
+  const { data: drivers, error, loading } = useFetch!;
   const {
     userLatitude,
     userLongitude,
     destinationLatitude,
     destinationLongitude,
   } = userLocationStore();
-  const { selectedDriver, setDrivers } = useDriverStore();
+  const { selectedDriver } = useDriverStore();
   const { setUserLocation } = userLocationStore();
 
   const [markers, setMarkers] = useState<MarkerData[]>([]);
@@ -46,20 +55,20 @@ const Map = () => {
     }
   }, [drivers, userLatitude, userLatitude]);
 
-  useEffect(() => {
-    // console.log("really");
-    if (markers.length > 0 && destinationLatitude && destinationLongitude) {
-      calculateDriverTimes({
-        markers,
-        destinationLatitude,
-        destinationLongitude,
-        userLatitude,
-        userLongitude,
-      }).then((drivers) => {
-        setDrivers(drivers as MarkerData[]);
-      });
-    }
-  }, [markers, destinationLatitude, destinationLongitude]);
+  // useEffect(() => {
+  //   // console.log("really");
+  //   if (markers.length > 0 && destinationLatitude && destinationLongitude) {
+  //     calculateDriverTimes({
+  //       markers,
+  //       destinationLatitude,
+  //       destinationLongitude,
+  //       userLatitude,
+  //       userLongitude,
+  //     }).then((drivers) => {
+  //       setDrivers(drivers as MarkerData[]);
+  //     });
+  //   }
+  // }, [markers, destinationLatitude, destinationLongitude]);
   if (loading || !userLatitude || !userLongitude)
     return (
       <View className="flex justify-between items-center w-full">

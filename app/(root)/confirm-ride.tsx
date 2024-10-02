@@ -5,10 +5,9 @@ import { useDriverStore } from "@/store";
 import { router } from "expo-router";
 import { FlatList, Text, View } from "react-native";
 
-
-
 const ConfirmRide = () => {
   const { drivers, selectedDriver, setSelectedDriver } = useDriverStore();
+  // console.log(drivers);
   return (
     <RideLayout title="Choose A Driver" snapPoints={["65%", "85%"]}>
       <FlatList
@@ -17,7 +16,7 @@ const ConfirmRide = () => {
           <DriverCard
             item={item}
             selected={selectedDriver!}
-            setSelected={() => setSelectedDriver(parseInt(item.id))}
+            setSelected={() => setSelectedDriver(parseInt(item.id as string))}
           />
         )}
         ListFooterComponent={() => (

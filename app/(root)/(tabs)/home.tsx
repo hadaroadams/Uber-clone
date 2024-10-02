@@ -16,6 +16,9 @@ import Map from "@/components/Map";
 import { useDriverStore, userLocationStore } from "@/store";
 import * as Location from "expo-location";
 import { router } from "expo-router";
+import { useFetch } from "@/lib/fetch";
+import { Driver, MarkerData } from "@/types/types";
+import { calculateDriverTimes } from "@/lib/map";
 
 const recentRide = [
   {
@@ -125,6 +128,17 @@ const recentRide = [
 ];
 
 const Home = () => {
+  // Map props
+  const driverData = useFetch<Driver[]>("/(api)/driver");
+  const {
+    userLatitude,
+    userLongitude,
+    destinationLatitude,
+    destinationLongitude,
+  } = userLocationStore();
+  const [markers, setMarkers] = useState<MarkerData[]>([]);
+  const { selectedDriver, setDrivers, drivers } = useDriverStore();
+
   const { setUserLocation, setDestinationLocation } = userLocationStore();
   const { user } = useClerk();
   const loading = true;
@@ -165,6 +179,28 @@ const Home = () => {
     console.log("home1");
   }, []);
   console.log("home");
+
+  useEffect(() => {
+    if (markers.length > 0 && destinationLatitude && destinationLongitude) {
+      console.log("really");
+      calculateDriverTimes({
+        markers,
+        destinationLatitude,
+        destinationLongitude,
+        userLatitude,
+        userLongitude,
+      })
+        .then((drivers) => {
+          console.log(drivers);
+          console.log("add");
+          setDrivers(drivers as MarkerData[]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [markers, destinationLatitude, destinationLongitude, drivers]);
+  console.log(1, drivers);
   return (
     <SafeAreaView className="bg-general-500">
       <FlatList
@@ -223,7 +259,7 @@ const Home = () => {
               Your Current Location
             </Text>
             <View className="flex flex-row items-center bg-transparent h-[300px]">
-              <Map />
+              <Map useFetch={driverData} />
             </View>
             <Text className="text-xl font-JakartaBold mt-5 mb-3">
               Recent Rides

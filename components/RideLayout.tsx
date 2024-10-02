@@ -5,6 +5,8 @@ import { router } from "expo-router";
 import { icons } from "@/constants";
 import Map from "./Map";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import { useFetch } from "@/lib/fetch";
+import { Driver } from "@/types/types";
 
 const RideLayout = ({
   title,
@@ -15,6 +17,8 @@ const RideLayout = ({
   children: React.ReactNode;
   snapPoints?: string[];
 }) => {
+  const driverData = useFetch<Driver[]>("/(api)/driver");
+
   const bottomSheetRef = useRef<BottomSheet>(null);
   console.log("RideLayout");
   return (
@@ -35,7 +39,7 @@ const RideLayout = ({
               {title || "Go Back"}
             </Text>
           </View>
-          <Map />
+          <Map useFetch={driverData} />
         </View>
         <BottomSheet
           keyboardBehavior="extend"
