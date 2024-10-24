@@ -17,8 +17,6 @@ const RideLayout = ({
   children: React.ReactNode;
   snapPoints?: string[];
 }) => {
-  const driverData = useFetch<Driver[]>("/(api)/driver");
-
   const bottomSheetRef = useRef<BottomSheet>(null);
   console.log("RideLayout");
   return (
@@ -39,7 +37,7 @@ const RideLayout = ({
               {title || "Go Back"}
             </Text>
           </View>
-          <Map useFetch={driverData} />
+          <Map />
         </View>
         <BottomSheet
           keyboardBehavior="extend"

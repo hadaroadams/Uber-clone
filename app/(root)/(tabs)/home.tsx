@@ -178,28 +178,9 @@ const Home = () => {
     requestLocation();
     console.log("home1");
   }, []);
-  console.log("home");
+  console.log("home123");
 
-  useEffect(() => {
-    if (markers.length > 0 && destinationLatitude && destinationLongitude) {
-      console.log("really");
-      calculateDriverTimes({
-        markers,
-        destinationLatitude,
-        destinationLongitude,
-        userLatitude,
-        userLongitude,
-      })
-        .then((drivers) => {
-          console.log(drivers);
-          console.log("add");
-          setDrivers(drivers as MarkerData[]);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  }, [markers, destinationLatitude, destinationLongitude, drivers]);
+ 
   console.log(1, drivers);
   return (
     <SafeAreaView className="bg-general-500">
@@ -252,14 +233,14 @@ const Home = () => {
             <GoogleTextInput
               icon={icons.search}
               containerStyle="bg-white shadow-md shadow-neutral-300"
-              handlePress={handleDestinationPress}
+              handlePress={handleDestinationPress}h
               textInputBackgroundColor="white"
             />
             <Text className="text-xl font-JakartaBold mt-5 mb-3">
               Your Current Location
             </Text>
             <View className="flex flex-row items-center bg-transparent h-[300px]">
-              <Map useFetch={driverData} />
+              <Map  />
             </View>
             <Text className="text-xl font-JakartaBold mt-5 mb-3">
               Recent Rides
