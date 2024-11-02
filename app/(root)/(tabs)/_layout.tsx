@@ -31,7 +31,7 @@ const TabIcon = ({
 };
 
 const Tabslayout = () => {
-  console.log("TabLayout");
+  // console.log("TabLayout");
   return (
     <Tabs
       initialRouteName="index"

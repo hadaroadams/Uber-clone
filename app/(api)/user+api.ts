@@ -2,7 +2,6 @@ import { neon } from "@neondatabase/serverless";
 
 export async function POST(request: Request) {
   const sql = neon(process.env.DATABASE_URL!);
-  console.log("isThis");
   try {
     // const posts = await sql("SELECT * FROM posts");
     const { name, email, clerkId } = await request.json();
@@ -25,7 +24,7 @@ export async function POST(request: Request) {
             ${clerkId}
         )
   `;
-    console.log("working");
+  
     // console.log("hello");
     return new Response(JSON.stringify({ data: response }), {
       status: 201,

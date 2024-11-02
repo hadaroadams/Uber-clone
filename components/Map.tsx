@@ -1,5 +1,5 @@
 import { View, Text, ActivityIndicator } from "react-native";
-import React, { memo, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import { useDriverStore, userLocationStore } from "@/store";
 import {
@@ -10,30 +10,23 @@ import {
 import { Driver, MarkerData } from "@/types/types";
 import { icons } from "@/constants";
 import { useFetch } from "@/lib/fetch";
-import { useUser } from "@clerk/clerk-expo";
-
-interface MapProp {
-  useFetch?: {
-    data: Driver[] | null;
-    loading: boolean;
-    error: string | null;
-    refetch: () => Promise<void>;
-  };
-}
+import MapViewDirections from "react-native-maps-directions";
 
 const Map = () => {
   const { data: drivers, error, loading } = useFetch<Driver[]>("/(api)/driver");
+
   const {
     userLatitude,
     userLongitude,
     destinationLatitude,
     destinationLongitude,
   } = userLocationStore();
+
   const { selectedDriver, setDrivers } = useDriverStore();
+
   const { setUserLocation } = userLocationStore();
 
   const [markers, setMarkers] = useState<MarkerData[]>([]);
-  console.log(userLatitude, userLongitude);
 
   const region = calculateRegion({
     userLatitude,
@@ -41,23 +34,26 @@ const Map = () => {
     destinationLatitude,
     destinationLongitude,
   });
+
   useEffect(() => {
-    // console.log("hello");
+    console.log(drivers);
     if (Array.isArray(drivers)) {
       if (!userLatitude || !userLongitude) return;
-
       const newMarkers = generateMarkersFromData({
         data: drivers,
         userLatitude,
         userLongitude,
       });
+      console.log(newMarkers, 1);
       setMarkers(newMarkers);
+      console.log(markers);
     }
-  }, [drivers, userLatitude, userLatitude]);
+  }, [userLatitude, userLatitude, drivers]);
 
   useEffect(() => {
-    // console.log("really");
+    console.log(1, markers);
     if (markers.length > 0 && destinationLatitude && destinationLongitude) {
+      console.log("run1");
       calculateDriverTimes({
         markers,
         destinationLatitude,
@@ -106,6 +102,29 @@ const Map = () => {
           }
         />
       ))}
+      {destinationLatitude && destinationLongitude && (
+        <>
+          <Marker
+            key={"description"}
+            coordinate={{
+              latitude: destinationLatitude,
+              longitude: destinationLongitude,
+            }}
+            title="destination"
+            image={icons.pin}
+          />
+          <MapViewDirections
+            origin={{ latitude: userLatitude, longitude: userLongitude }}
+            destination={{
+              latitude: destinationLatitude,
+              longitude: destinationLongitude,
+            }}
+            apikey={process.env.EXPO_PUBLIC_GOOGLE_API_KEY}
+            strokeColor="#0286FF"
+            strokeWidth={3}
+          />
+        </>
+      )}
     </MapView>
   );
 };

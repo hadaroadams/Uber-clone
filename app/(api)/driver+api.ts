@@ -5,7 +5,7 @@ export const GET = async () => {
     const sql = neon(`${process.env.DATABASE_URL}`);
 
     const response = await sql`SELECT * FROM drivers`;
-    console.log(response)
+    // console.log(response)
     return Response.json({ data: response });
   } catch (error) {
     console.log(error);
