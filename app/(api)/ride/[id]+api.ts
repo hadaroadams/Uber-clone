@@ -1,6 +1,7 @@
 import {neon} from "@neondatabase/serverless";
 
 export async function GET(request: Request, {id}: { id: string }) {
+    console.log("work")
     if (!id)
         return Response.json({error: "Missing required fields"}, {status: 400});
 
@@ -37,7 +38,7 @@ export async function GET(request: Request, {id}: { id: string }) {
         ORDER BY 
             rides.created_at DESC;
         `;
-
+    // console.log(res)
         return Response.json({data: response});
     } catch (error) {
         console.error("Error fetching recent rides:", error);

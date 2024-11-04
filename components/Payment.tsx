@@ -30,7 +30,7 @@ const Payment = ({
   const { userId } = useAuth();
 
   const initializePaymentSheet = async () => {
-    console.log("first");
+    // console.log("first");
     const { error } = await initPaymentSheet({
       merchantDisplayName: "Ryde Inc.",
       intentConfiguration: {
@@ -40,7 +40,7 @@ const Payment = ({
         },
         confirmHandler: async (paymentMethod, _, intentCreationCallback) => {
           // Make a request to your own server.
-          console.log("second");
+          // console.log("second");
 
           const { paymentIntent, customer } = await fetchAPI(
             "/(api)/(stripe)/create",
@@ -57,7 +57,7 @@ const Payment = ({
               }),
             }
           );
-          console.log("Third");
+          // console.log("Third");
           // console.log(paymentIntent,customer);
 
           if (paymentIntent.client_secret) {
@@ -73,11 +73,11 @@ const Payment = ({
                 client_secret: paymentIntent.client_secret,
               }),
             });
-            console.log(result);
-            console.log("four");
+            // console.log(result);
+            // console.log("four");
             if (result.client_secret) {
-              console.log("five");
-              await fetchAPI("/(api)/(ride)/create", {
+              // console.log("five");
+              await fetchAPI("/(api)/ride/create", {
                 method: "POST",
                 headers: {
                   "content-Type": "application/json",
@@ -96,14 +96,14 @@ const Payment = ({
                   user_id: userId,
                 }),
               });
-              console.log("five");
+              // console.log("five");
 
               intentCreationCallback({
                 clientSecret: result.client_secret,
               });
-              console.log("six");
+              // console.log("six");
+              setSuccess(true);
             }
-            console.log("seven");
           }
           // Call the `intentCreationCallback` with your server response's client secret or error
           // const { client_secret, error } = await response.json()();
@@ -114,7 +114,7 @@ const Payment = ({
           // }
         },
       },
-      returnURL: 'myapp://book-ride',
+      returnURL: "myapp://book-ride",
     });
     // console.log("seven");
     if (error) {
@@ -130,10 +130,10 @@ const Payment = ({
 
   const didTapCheckoutButton = async () => {
     // implement later
-    console.log("tapp");
+    // console.log("tapp");
     try {
       await initializePaymentSheet();
-      console.log("tapped");
+      // console.log("tapped");
       const { error } = await presentPaymentSheet();
 
       if (error) {

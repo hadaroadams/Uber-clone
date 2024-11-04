@@ -36,7 +36,7 @@ const Map = () => {
   });
 
   useEffect(() => {
-    console.log(drivers);
+    // console.log(drivers);
     if (Array.isArray(drivers)) {
       if (!userLatitude || !userLongitude) return;
       const newMarkers = generateMarkersFromData({
@@ -44,16 +44,16 @@ const Map = () => {
         userLatitude,
         userLongitude,
       });
-      console.log(newMarkers, 1);
+      // console.log(newMarkers, 1);
       setMarkers(newMarkers);
-      console.log(markers);
+      // console.log(markers);
     }
   }, [userLatitude, userLatitude, drivers]);
 
   useEffect(() => {
-    console.log(1, markers);
+    // console.log(1, markers);
     if (markers.length > 0 && destinationLatitude && destinationLongitude) {
-      console.log("run1");
+      // console.log("run1");
       calculateDriverTimes({
         markers,
         destinationLatitude,

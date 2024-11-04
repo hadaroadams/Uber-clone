@@ -1,4 +1,8 @@
 import * as SecureStore from "expo-secure-store";
+import * as Linking from "expo-linking";
+import { fetchAPI } from "./fetch";
+import Signin from "@/app/(auth)/sign-in";
+import { SignIn } from "@clerk/clerk-react";
 export interface TokenCache {
   getToken: (key: string) => Promise<string | undefined | null>;
   saveToken: (key: string, token: string) => Promise<void>;
@@ -28,4 +32,53 @@ export const tokenCache = {
       return;
     }
   },
+};
+
+export const googleOAuth = async (startOAuthFlow: any) => {
+  try {
+    const { createdSessionId, signIn, signUp, setActive } =
+      await startOAuthFlow({
+        redirectUrl: Linking.createURL("/home", {
+          scheme: "myapp",
+        }),
+      });
+
+    if (createdSessionId) {
+      if (setActive) {
+        await setActive({ session: createdSessionId });
+        console.log(1);
+        console.log("signUp", signUp);
+        console.log("signIn", signIn);
+        if (signUp.createdUserId) {
+          console.log(2);
+          await fetchAPI("/(api)/user", {
+            method: "POST",
+            body: JSON.stringify({
+              name: `${signUp.firstName} ${signUp.lastName}`,
+              email: signUp.emailAddress,
+              clerkId: signUp.createdUserId,
+            }),
+          });
+        }
+        return {
+          success: true,
+          code: "success",
+          message: "You have successfully authenticated",
+        };
+      }
+    }
+    return {
+      success: false,
+      code: "Succes",
+      message: "An error occurred",
+      // Use signIn or signUp for next steps such as MFA
+    };
+  } catch (erro: any) {
+    console.log(erro);
+    return {
+      success: false,
+      code: erro.code,
+      message: erro?.errors[0]?.longMessage,
+    };
+  }
 };

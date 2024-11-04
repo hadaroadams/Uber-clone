@@ -16,17 +16,23 @@ import Map from "@/components/Map";
 import { useDriverStore, userLocationStore } from "@/store";
 import * as Location from "expo-location";
 import { router } from "expo-router";
-import { Driver, MarkerData } from "@/types/types";
+import { Driver, MarkerData, Ride } from "@/types/types";
 import { useFetch } from "@/lib/fetch";
 
 const Home = () => {
   const { setUserLocation, setDestinationLocation } = userLocationStore();
-  const { user } = useClerk();
+  const { user, signOut } = useClerk();
+  console.log(user?.id);
 
-  const { data: recentRide, loading } = useFetch(`(api)/ride/${user?.id}`);
+  const { data: recentRide, loading } = useFetch<Ride[]>(
+    `/(api)/ride/${user?.id}`
+  );
   const [hasPermission, setHasPermission] = useState(false);
 
-  const handleSignOut = () => {};
+  const handleSignOut = () => {
+    signOut();
+    router.replace("/(auth)/sign-in");
+  };
   const handleDestinationPress = (location: {
     latitude: number;
     longitude: number;
@@ -58,11 +64,11 @@ const Home = () => {
     };
     requestLocation();
   }, []);
-
+console.log(user)
   return (
     <SafeAreaView className="bg-general-500">
       <FlatList
-        data={recentRide}
+        data={recentRide?.slice(0, 5)}
         // data={[]}
         renderItem={({ item }) => <RideCard ride={item} />}
         className="px-5"
