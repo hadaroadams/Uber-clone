@@ -12,8 +12,8 @@ export const generateMarkersFromData = ({
   userLongitude: number;
 }): MarkerData[] => {
   return data.map((driver, index) => {
-    const latOffset = (0.75 - 0.5) * 0.01; // Random offset between -0.005 and 0.005
-    const lngOffset = (0.45 - 0.5) * 0.01; // Random offset between -0.005 and 0.005
+    const latOffset = (Math.random() - 0.5) * 0.01; // Random offset between -0.005 and 0.005
+    const lngOffset = (Math.random() - 0.5) * 0.01; // Random offset between -0.005 and 0.005
 
     return {
       latitude: userLatitude + latOffset,

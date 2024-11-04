@@ -22,7 +22,7 @@ const Map = () => {
     destinationLongitude,
   } = userLocationStore();
 
-  const { selectedDriver, setDrivers } = useDriverStore();
+  const { selectedDriver, setDrivers, } = useDriverStore();
 
   const { setUserLocation } = userLocationStore();
 
